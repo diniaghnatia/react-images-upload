@@ -74,13 +74,23 @@ class ReactImageUploadComponent extends React.Component {
         this.setState({notAcceptedFileSize: newArray});
         continue;
       }
-
-      allFilePromises.push(this.readFile(f));
+      // if (this.props.singleImage) {
+      //   allFilePromises.pop();
+      //   allFilePromises.push(this.readFile(f));
+      // } else {
+        allFilePromises.push(this.readFile(f));
+      // }
     }
 
+    window.alert('is single image: ', this.props.singleImage);
+
     Promise.all(allFilePromises).then(newFilesData => {
-      const dataURLs = this.state.pictures.slice();
-      const files = this.state.files.slice();
+      let dataURLs = [];
+      let files = [];
+      if (!this.props.singleImage) {
+        dataURLs = this.state.pictures.slice();
+        files = this.state.files.slice();
+      }
 
       newFilesData.forEach(newFileData => {
         dataURLs.push(newFileData.dataURL);
